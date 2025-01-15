@@ -1,39 +1,35 @@
 OSM.Changeset = function (map) {
   var page = {},
-      content = $("#sidebar_content"),
-      currentChangesetId;
+      content = $("#sidebar_content");
 
-  page.pushstate = page.popstate = function (path, id) {
+  page.pushstate = page.popstate = function (path) {
     OSM.loadSidebarContent(path, function () {
-      page.load(path, id);
+      page.load();
     });
   };
 
-  page.load = function (path, id) {
-    if (id) currentChangesetId = id;
-    initialize();
-    addChangeset(currentChangesetId, true);
-  };
+  page.load = function () {
+    const changesetData = content.find("[data-changeset]").data("changeset");
+    changesetData.type = "changeset";
 
-  function addChangeset(id, center) {
-    map.addObject({ type: "changeset", id: parseInt(id, 10) }, function (bounds) {
-      if (!window.location.hash && bounds.isValid() &&
-          (center || !map.getBounds().contains(bounds))) {
+    initialize();
+    map.addObject(changesetData, function (bounds) {
+      if (!window.location.hash && bounds.isValid()) {
         OSM.router.withoutMoveListener(function () {
           map.fitBounds(bounds);
         });
       }
     });
-  }
+  };
 
-  function updateChangeset(form, method, url, include_data) {
+  function updateChangeset(method, url, include_data) {
     var data;
 
-    $(form).find("#comment-error").prop("hidden", true);
-    $(form).find("input[type=submit]").prop("disabled", true);
+    content.find("#comment-error").prop("hidden", true);
+    content.find("button[data-method][data-url]").prop("disabled", true);
 
     if (include_data) {
-      data = { text: $(form.text).val() };
+      data = { text: content.find("textarea").val() };
     } else {
       data = {};
     }
@@ -46,25 +42,22 @@ OSM.Changeset = function (map) {
       success: function () {
         OSM.loadSidebarContent(window.location.pathname, page.load);
       },
-      error: function (xhr, xhr_status, http_status) {
-        $(form).find("#comment-error").text(http_status);
-        $(form).find("#comment-error").prop("hidden", false);
-        $(form).find("input[type=submit]").prop("disabled", false);
+      error: function (xhr) {
+        content.find("button[data-method][data-url]").prop("disabled", false);
+        content.find("#comment-error")
+          .text(xhr.responseText)
+          .prop("hidden", false)
+          .get(0).scrollIntoView({ block: "nearest" });
       }
     });
   }
 
   function initialize() {
-    content.find("input[name=comment]").on("click", function (e) {
+    content.find("button[data-method][data-url]").on("click", function (e) {
       e.preventDefault();
       var data = $(e.target).data();
-      updateChangeset(e.target.form, data.method, data.url, true);
-    });
-
-    content.find(".action-button").on("click", function (e) {
-      e.preventDefault();
-      var data = $(e.target).data();
-      updateChangeset(e.target.form, data.method, data.url);
+      var include_data = e.target.name === "comment";
+      updateChangeset(data.method, data.url, include_data);
     });
 
     content.find("textarea").on("input", function (e) {

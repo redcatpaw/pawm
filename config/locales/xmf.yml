@@ -40,10 +40,6 @@ xmf:
         create: ბლოკირაფაშ გოჭყაფა
         update: ბლოკირაფაშ გოახალაფა
   activerecord:
-    errors:
-      messages:
-        invalid_email_address: თინი ელექტრონული ფოსტაშ მიოწურაფუს ვამოგენს
-        email_address_not_routable: ვარე მარშრუტირაფილი
     models:
       acl: ხემეჭირნაფაშ კონტროლიშ ერკებული
       changeset: თირაფეფიშ პაკეტი
@@ -137,7 +133,6 @@ xmf:
         auth_provider: ავთენტიფიკაციაშ პროვაიდერი
         auth_uid: ავთენტიფიკაციაშ UID
         email: ელ. ფოსტა
-        email_confirmation: ელ-ფოსტაშ დოდასურაფა
         new_email: ახალი ელ-ფოსტაშ მიოწურაფუ
         active: აქტიური
         display_name: ჯოხო ეკრანს
@@ -206,7 +201,6 @@ xmf:
   auth:
     providers:
       none: აკა ვარი
-      openid: OpenID
       google: Google
       facebook: Facebook
       github: GitHub
@@ -274,10 +268,6 @@ xmf:
     destroy:
       success: ანგარიშიქ დილასჷ.
   browse:
-    created: აკიქიმინუ
-    closed: კილერი
-    created_ago_html: გიჭყჷ %{time_ago}
-    closed_ago_html: გიჭყჷ %{time_ago}
     version: ვერსია
     in_changeset: თირაფეფიშ პაკეტი
     anonymous: ანონიმი
@@ -293,25 +283,6 @@ xmf:
     view_history: ისტორიაშ ძირაფა
     view_details: დეტალეფიშ ძირაფა
     location: ორენიː
-    changeset:
-      title: 'თირაფეფიშ პაკეტი: %{id}'
-      belongs_to: ავტორი
-      node: ჭურჭულეფი (%{count})
-      node_paginated: ჭურჭულეფი (%{x}-%{y} %{count}-შე)
-      way: ღოზეფი (%{count})
-      way_paginated: ღოზეფი (%{x}-%{y} %{count}-შე)
-      relation: ურთიართობეფი (%{count})
-      relation_paginated: ურთიართობეფი (%{x}-%{y} %{count}-შე)
-      comment: კომენტარეფი (%{count})
-      changesetxml: თირუეფიშ პაკეტიშ XML
-      osmchangexml: osmChange XML
-      feed:
-        title: თირუეფიშ პაკეტი %{id}
-        title_comment: თირუეფიშ პაკეტი %{id} - %{comment}
-      join_discussion: გემშართით სისტემაშა, თიშენ ნამჷ-და, სხუნუას ქაკათათინ
-      discussion: სხუნუა
-      still_open: თირუეფიშ პაკეტი დიო ღილე რე. სხუნუა ხემიოჭირინაფუ იჸი, მუჭო თირუეფიშ
-        პაკეტი დიკილუნ.
     node:
       title_html: 'ჭურჭული: %{name}'
       history_title_html: 'ჭურჭულიშ ისტორია: %{name}'
@@ -338,7 +309,6 @@ xmf:
         way: რზა
         relation: ურთიართობა
     containing_relation:
-      entry_html: ურთიართობა %{relation_name}
       entry_role_html: ურთიართობა %{relation_name} (მუჭოთ %{relation_role})
     not_found:
       title: ვეგორჷ
@@ -387,21 +357,18 @@ xmf:
       introduction: უახოლაში ობიექტეფიშ ოგორალო ქეგუნჭირით რუკა.
       nearby: უახოლაში ობიექტეფი
       enclosing: ორენი
+  changeset_comments:
+    feeds:
+      comment:
+        comment: 'ახალი კომენტარი თირუეფიშ პაკეტშო #%{changeset_id} %{author}-შე'
+        commented_at_by_html: გაახალებური რე %{when} %{user}-იშით
+      show:
+        title_all: OpenStreetMap-შ თირუეფიშ პაკეტიშ სხუნუა
+        title_particular: 'OpenStreetMap თირუეფიშ პაკეტიშ სხუნუა #%{changeset_id}'
   changesets:
-    changeset_paging_nav:
-      showing_page: ხასჷლა %{page}
-      next: გეჸვენჯი →
-      previous: ← კინოხიანი
     changeset:
-      anonymous: ანონიმი
       no_edits: (რედაქტირაფა ვა რე)
       view_changeset_details: თირუეფიშ პაკეტიშ კილიშკილი ინფორმაციაშ ძირაფა
-    changesets:
-      id: ID
-      saved_at: თებული რე
-      user: მახვარებუ
-      comment: კომენტარი
-      area: ტერიტორია
     index:
       title: თირუეფიშ პაკეტი
       title_user: მახვარებუ %{user}-შ თირუეფიშ პაკეტეფი
@@ -414,18 +381,32 @@ xmf:
       no_more_area: თე ტერიტორიას თირუეფიშ პაკეტეფქ ვეგორუ.
       no_more_user: თე მახვარებუშ თირუეფიშ პაკეტეფქ ვეგორუ.
       load_more: უმოსიშ გჷმოხარგუა
+      feed:
+        title: თირუეფიშ პაკეტი %{id}
+        title_comment: თირუეფიშ პაკეტი %{id} - %{comment}
+        created: აკიქიმინუ
+        closed: კილერი
+        belongs_to: ავტორი
+    show:
+      title: 'თირაფეფიშ პაკეტი: %{id}'
+      created_ago_html: გიჭყჷ %{time_ago}
+      closed_ago_html: გიჭყჷ %{time_ago}
+      discussion: სხუნუა
+      join_discussion: გემშართით სისტემაშა, თიშენ ნამჷ-და, სხუნუას ქაკათათინ
+      still_open: თირუეფიშ პაკეტი დიო ღილე რე. სხუნუა ხემიოჭირინაფუ იჸი, მუჭო თირუეფიშ
+        პაკეტი დიკილუნ.
+      changesetxml: თირუეფიშ პაკეტიშ XML
+      osmchangexml: osmChange XML
+    paging_nav:
+      nodes: ჭურჭულეფი (%{count})
+      nodes_paginated: ჭურჭულეფი (%{x}-%{y} %{count}-შე)
+      ways: ღოზეფი (%{count})
+      ways_paginated: ღოზეფი (%{x}-%{y} %{count}-შე)
+      relations: ურთიართობეფი (%{count})
+      relations_paginated: ურთიართობეფი (%{x}-%{y} %{count}-შე)
     timeout:
       sorry: სანარღოთ, თირუეფიშ პაკეტეფიშ ერკებული, ნამუთ თქვა მითხითჷნ, ძალამ დიდი
         ბორჯი ოკო გიშაღალარო.
-  changeset_comments:
-    comment:
-      comment: 'ახალი კომენტარი თირუეფიშ პაკეტშო #%{changeset_id} %{author}-შე'
-      commented_at_by_html: გაახალებური რე %{when} %{user}-იშით
-    comments:
-      comment: 'ახალი კომენტარი თირუეფიშ პაკეტშო #%{changeset_id} %{author}-შე'
-    index:
-      title_all: OpenStreetMap-შ თირუეფიშ პაკეტიშ სხუნუა
-      title_particular: 'OpenStreetMap თირუეფიშ პაკეტიშ სხუნუა #%{changeset_id}'
   dashboards:
     contact:
       km away: თქვანდე %{count}კმ.
@@ -485,8 +466,6 @@ xmf:
       confirm: მეღება
     location:
       location: ორენიː
-      view: ძირაფა
-      edit: რედაქტირაფა
     feed:
       user:
         title: OpenStreetMap დღარიშ დინნაჭარეფი მახვარებუშო %{user}
@@ -494,13 +473,13 @@ xmf:
         title: OpenStreetMap დღარიშ დინნაჭარეფი გეჸვენჯი ნინაშა %{language_name}
       all:
         title: OpenStreetMap დღარიშ დინნაჭარეფი
-    comments:
+  diary_comments:
+    index:
       no_comments: დღარი კომენტარეფი ვა რე
+    page:
       post: პოსტი
       when: მუჟამს
       comment: კომენტარი
-      newer_comments: უახალაში კომენტარეფი
-      older_comments: ჯვეში კომენტარეფი
   errors:
     contact:
       contact: კონტაქტი
@@ -1054,18 +1033,18 @@ xmf:
         level8: ნოღაშ ხურგი
         level9: ოფუტეშ ხურგი
         level11: სამეძობოშ ხურგი
-      types:
-        cities: ნოღეფი
-        towns: დაბეფი
-        places: აბანეფი
     results:
       no_results: შედეგიქ ვეგორჷ
       more_results: უმოსი შედეგი
   layouts:
     intro_header: მოზოჯით OpenStreetMap-შა!
-    intro_2_create_account: მახვარებუეფიშ ანგარიშიშ გოჭყაფა
     tou: გჷმორინაფაშ წესეფი
     about: გეშა
+  shared:
+    pagination:
+      diary_comments:
+        older: ჯვეში კომენტარეფი
+        newer: უახალაში კომენტარეფი
   users:
     auth_failure:
       unknown_error: ავთენტიფიკაციაქ ვეგშართჷ
@@ -1086,4 +1065,6 @@ xmf:
       report: ქჷმოგინაფეთ თე მეღანკუაშ გეშა
     new:
       title: ახალი ხვილაფა
+    notes_paging_nav:
+      showing_page: ხასჷლა %{page}
 ...

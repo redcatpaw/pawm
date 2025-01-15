@@ -8,9 +8,10 @@ L.OSM.share = function (options) {
 
   control.onAddPane = function (map, button, $ui) {
     // Link / Embed
+    $("#content").addClass("overlay-right-sidebar");
 
     var $linkSection = $("<div>")
-      .attr("class", "section share-link")
+      .attr("class", "share-link p-3 border-bottom border-secondary-subtle")
       .appendTo($ui);
 
     $("<h4>")
@@ -46,10 +47,13 @@ L.OSM.share = function (options) {
         .text(I18n.t("javascripts.share.short_link")))
       .append($("<a class='btn btn-primary'>")
         .attr("for", "embed_html")
+        .attr("id", "embed_link")
+        .attr("data-bs-title", I18n.t("javascripts.site.embed_html_disabled"))
         .attr("href", "#")
         .text(I18n.t("javascripts.share.embed")))
       .on("click", "a", function (e) {
         e.preventDefault();
+        if (!$(this).hasClass("btn-primary")) return;
         var id = "#" + $(this).attr("for");
         $(this).siblings("a")
           .removeClass("active");
@@ -95,13 +99,13 @@ L.OSM.share = function (options) {
           .on("click", select))
       .append(
         $("<p>")
-          .attr("class", "text-muted")
+          .attr("class", "text-body-secondary")
           .text(I18n.t("javascripts.share.paste_html")));
 
     // Geo URI
 
     var $geoUriSection = $("<div>")
-      .attr("class", "section share-geo-uri")
+      .attr("class", "share-geo-uri p-3 border-bottom border-secondary-subtle")
       .appendTo($ui);
 
     $("<h4>")
@@ -116,7 +120,7 @@ L.OSM.share = function (options) {
     // Image
 
     var $imageSection = $("<div>")
-      .attr("class", "section share-image")
+      .attr("class", "share-image p-3")
       .appendTo($ui);
 
     $("<h4>")
@@ -125,8 +129,13 @@ L.OSM.share = function (options) {
 
     $("<div>")
       .attr("id", "export-warning")
-      .attr("class", "text-muted")
-      .text(I18n.t("javascripts.share.only_standard_layer"))
+      .attr("class", "text-body-secondary")
+      .text(I18n.t("javascripts.share.only_layers_exported_as_image"))
+      .append(
+        $("<ul>").append(
+          map.baseLayers
+            .filter(layer => layer.options.canDownloadImage)
+            .map(layer => $("<li>").text(layer.options.name))))
       .appendTo($imageSection);
 
     $form = $("<form>")
@@ -156,6 +165,7 @@ L.OSM.share = function (options) {
     $("<div>")
       .appendTo($form)
       .attr("class", "row mb-3")
+      .attr("id", "mapnik_scale_row")
       .append($("<label>")
         .attr("for", "mapnik_scale")
         .attr("class", "col-auto col-form-label")
@@ -191,7 +201,7 @@ L.OSM.share = function (options) {
             .attr("class", "form-check-input")
             .bind("change", toggleFilter))));
 
-    ["minlon", "minlat", "maxlon", "maxlat"].forEach(function (name) {
+    ["minlon", "minlat", "maxlon", "maxlat", "lat", "lon"].forEach(function (name) {
       $("<input>")
         .attr("id", "mapnik_" + name)
         .attr("name", name)
@@ -200,8 +210,30 @@ L.OSM.share = function (options) {
     });
 
     $("<input>")
+      .attr("id", "map_format")
       .attr("name", "format")
       .attr("value", "mapnik")
+      .attr("type", "hidden")
+      .appendTo($form);
+
+    $("<input>")
+      .attr("id", "map_zoom")
+      .attr("name", "zoom")
+      .attr("value", map.getZoom())
+      .attr("type", "hidden")
+      .appendTo($form);
+
+    $("<input>")
+      .attr("id", "map_width")
+      .attr("name", "width")
+      .attr("value", 0)
+      .attr("type", "hidden")
+      .appendTo($form);
+
+    $("<input>")
+      .attr("id", "map_height")
+      .attr("name", "height")
+      .attr("value", 0)
       .attr("type", "hidden")
       .appendTo($form);
 
@@ -215,12 +247,13 @@ L.OSM.share = function (options) {
       .appendTo($form);
 
     var args = {
+      layer: "<span id=\"mapnik_image_layer\"></span>",
       width: "<span id=\"mapnik_image_width\"></span>",
       height: "<span id=\"mapnik_image_height\"></span>"
     };
 
     $("<p>")
-      .attr("class", "text-muted")
+      .attr("class", "text-body-secondary")
       .html(I18n.t("javascripts.share.image_dimensions", args))
       .appendTo($form);
 
@@ -309,6 +342,8 @@ L.OSM.share = function (options) {
     }
 
     function update() {
+      const layer = map.getMapBaseLayer();
+      var canEmbed = Boolean(layer && layer.options.canEmbed);
       var bounds = map.getBounds();
 
       $("#link_marker")
@@ -332,6 +367,14 @@ L.OSM.share = function (options) {
       if (map.hasLayer(marker)) {
         var latLng = marker.getLatLng().wrap();
         params.marker = latLng.lat + "," + latLng.lng;
+      }
+
+      $("#embed_link")
+        .toggleClass("btn-primary", canEmbed)
+        .toggleClass("btn-secondary", !canEmbed)
+        .tooltip(canEmbed ? "disable" : "enable");
+      if (!canEmbed && $("#embed_link").hasClass("active")) {
+        $("#long_link").click();
       }
 
       $("#embed_html").val(
@@ -368,16 +411,25 @@ L.OSM.share = function (options) {
         $("#mapnik_scale").val(scale);
       }
 
-      $("#mapnik_image_width").text(Math.round(size.x / scale / 0.00028));
-      $("#mapnik_image_height").text(Math.round(size.y / scale / 0.00028));
+      const mapWidth = Math.round(size.x / scale / 0.00028);
+      const mapHeight = Math.round(size.y / scale / 0.00028);
+      $("#mapnik_image_width").text(mapWidth);
+      $("#mapnik_image_height").text(mapHeight);
 
-      if (map.getMapBaseLayerId() === "mapnik") {
-        $("#export-image").show();
-        $("#export-warning").hide();
-      } else {
-        $("#export-image").hide();
-        $("#export-warning").show();
-      }
+      const canDownloadImage = Boolean(layer && layer.options.canDownloadImage);
+
+      $("#mapnik_image_layer").text(canDownloadImage ? layer.options.name : "");
+      $("#map_format").val(canDownloadImage ? layer.options.layerId : "");
+
+      $("#map_zoom").val(map.getZoom());
+      $("#mapnik_lon").val(map.getCenter().lng);
+      $("#mapnik_lat").val(map.getCenter().lat);
+      $("#map_width").val(mapWidth);
+      $("#map_height").val(mapHeight);
+
+      $("#export-image").toggle(canDownloadImage);
+      $("#export-warning").toggle(!canDownloadImage);
+      $("#mapnik_scale_row").toggle(canDownloadImage && layer.options.layerId === "mapnik");
     }
 
     function select() {

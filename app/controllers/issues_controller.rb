@@ -1,4 +1,6 @@
 class IssuesController < ApplicationController
+  include PaginationMethods
+
   layout "site"
 
   before_action :authorize_web
@@ -11,24 +13,25 @@ class IssuesController < ApplicationController
   before_action :check_database_writable, :only => [:resolve, :ignore, :reopen]
 
   def index
+    @params = params.permit(:before, :after, :limit, :status, :search_by_user, :issue_type, :last_updated_by)
+    @params[:limit] ||= 50
     @title = t ".title"
 
     @issue_types = []
-    @issue_types.push("Note", "User") if current_user.moderator?
-    @issue_types.push("DiaryEntry", "DiaryComment", "User") if current_user.administrator?
+    @issue_types |= %w[Note User] if current_user.moderator?
+    @issue_types |= %w[DiaryEntry DiaryComment User] if current_user.administrator?
 
     @users = User.joins(:roles).where(:user_roles => { :role => current_user.roles.map(&:role) }).distinct
-    @issues = Issue.visible_to(current_user).order(:updated_at => :desc)
+    @issues = Issue.visible_to(current_user)
 
     # If search
     if params[:search_by_user].present?
       @find_user = User.find_by(:display_name => params[:search_by_user])
-      if @find_user
-        @issues = @issues.where(:reported_user => @find_user)
-      else
-        @issues = @issues.none
-        flash.now[:warning] = t(".user_not_found")
-      end
+      @issues = if @find_user
+                  @issues.where(:reported_user => @find_user)
+                else
+                  @issues.none
+                end
     end
 
     @issues = @issues.where(:status => params[:status]) if params[:status].present?
@@ -39,10 +42,13 @@ class IssuesController < ApplicationController
       last_updated_by = params[:last_updated_by].to_s == "nil" ? nil : params[:last_updated_by].to_i
       @issues = @issues.where(:updated_by => last_updated_by)
     end
+
+    @issues, @newer_issues_id, @older_issues_id = get_page_items(@issues, :limit => @params[:limit])
+    render :partial => "page" if turbo_frame_request_id == "pagination"
   end
 
   def show
-    @title = t ".title", :status => @issue.status.humanize, :issue_id => @issue.id
+    @title = t ".title.#{@issue.status}", :issue_id => @issue.id
     @read_reports = @issue.read_reports
     @unread_reports = @issue.unread_reports
     @comments = @issue.comments

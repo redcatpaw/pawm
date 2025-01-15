@@ -3,56 +3,50 @@
 class ApiAbility
   include CanCan::Ability
 
-  def initialize(user)
-    can :show, :capability
-    can :index, :change
-    can :index, :map
-    can :show, :permission
-    can :show, :version
+  def initialize(token)
+    can :read, [:version, :capability, :permission, :map]
 
     if Settings.status != "database_offline"
-      can [:show, :download, :query], Changeset
-      can [:index, :create, :comment, :feed, :show, :search], Note
-      can :index, Tracepoint
-      can [:index, :show], User
-      can [:index, :show], Node
-      can [:index, :show, :full, :ways_for_node], Way
-      can [:index, :show, :full, :relations_for_node, :relations_for_way, :relations_for_relation], Relation
-      can [:history, :version], OldNode
-      can [:history, :version], OldWay
-      can [:history, :version], OldRelation
-    end
+      user = User.find(token.resource_owner_id) if token
 
-    if user&.active?
-      can :welcome, :site
-      can [:revoke, :authorize], :oauth
+      can [:read, :feed, :search], Note
+      can :create, Note unless token
 
-      if Settings.status != "database_offline"
-        can [:index, :new, :create, :show, :edit, :update, :destroy], ClientApplication
-        can [:new, :create, :reply, :show, :inbox, :outbox, :mark, :destroy], Message
-        can [:close, :reopen], Note
-        can [:new, :create], Report
-        can [:create, :show, :update, :destroy, :data], Trace
-        can [:details, :gpx_files], User
-        can [:index, :show, :update, :update_all, :destroy], UserPreference
+      can [:read, :download], Changeset
+      can :read, Tracepoint
+      can :read, User
+      can :read, Node
+      can [:read, :full, :ways_for_node], Way
+      can [:read, :full, :relations_for_node, :relations_for_way, :relations_for_relation], Relation
+      can [:history, :read], [OldNode, OldWay, OldRelation]
+      can :read, UserBlock
+
+      if user&.active?
+        can [:create, :comment, :close, :reopen], Note if scope?(token, :write_notes)
+        can [:create, :destroy], NoteSubscription if scope?(token, :write_notes)
+
+        can :read, Trace if scope?(token, :read_gpx)
+        can [:create, :update, :destroy], Trace if scope?(token, :write_gpx)
+
+        can :details, User if scope?(token, :read_prefs)
+        can :read, UserPreference if scope?(token, :read_prefs)
+        can [:update, :update_all, :destroy], UserPreference if scope?(token, :write_prefs)
+
+        can [:read, :update, :destroy], Message if scope?(token, :consume_messages)
+        can :create, Message if scope?(token, :send_messages)
 
         if user.terms_agreed?
-          can [:create, :update, :upload, :close, :subscribe, :unsubscribe], Changeset
-          can :create, ChangesetComment
-          can [:create, :update, :delete], Node
-          can [:create, :update, :delete], Way
-          can [:create, :update, :delete], Relation
+          can [:create, :update, :upload, :close, :subscribe, :unsubscribe], Changeset if scope?(token, :write_api)
+          can :create, ChangesetComment if scope?(token, :write_api)
+          can [:create, :update, :delete], [Node, Way, Relation] if scope?(token, :write_api)
         end
 
         if user.moderator?
-          can [:destroy, :restore], ChangesetComment
-          can :destroy, Note
+          can [:destroy, :restore], ChangesetComment if scope?(token, :write_api)
 
-          if user.terms_agreed?
-            can :redact, OldNode
-            can :redact, OldWay
-            can :redact, OldRelation
-          end
+          can :destroy, Note if scope?(token, :write_notes)
+
+          can :redact, [OldNode, OldWay, OldRelation] if user&.terms_agreed? && scope?(token, :write_redactions)
         end
       end
     end
@@ -83,5 +77,11 @@ class ApiAbility
     #
     # See the wiki for details:
     # https://github.com/CanCanCommunity/cancancan/wiki/Defining-Abilities
+  end
+
+  private
+
+  def scope?(token, scope)
+    token&.includes_scope?(scope)
   end
 end
