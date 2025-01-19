@@ -44,6 +44,14 @@ L.OSM.TransportMap = L.OSM.TileLayer.extend({
   }
 });
 
+L.OSM.TransportDarkMap = L.OSM.TileLayer.extend({
+  options: {
+    url: 'https://{s}.tile.thunderforest.com/transport-dark/{z}/{x}/{y}{r}.png?apikey={apikey}',
+    maxZoom: 21,
+    attribution: '© <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors. Tiles courtesy of <a href="http://www.thunderforest.com/" target="_blank">Andy Allan</a>'
+  }
+});
+
 L.OSM.OPNVKarte = L.OSM.TileLayer.extend({
   options: {
     url: 'https://tileserver.memomaps.de/tilegen/{z}/{x}/{y}.png',
@@ -61,6 +69,14 @@ L.OSM.HOT = L.OSM.TileLayer.extend({
   }
 });
 
+L.OSM.TracestrackTopo = L.OSM.TileLayer.extend({
+  options: {
+    url: 'https://tile.tracestrack.com/topo__/{z}/{x}/{y}.png?key={apikey}',
+    maxZoom: 19,
+    attribution: '© <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors. Tiles courtesy of <a href="https://www.tracestrack.com/" target="_blank">Tracestrack Maps</a>'
+  }
+});
+
 L.OSM.GPS = L.OSM.TileLayer.extend({
   options: {
     url: 'https://gps.tile.openstreetmap.org/lines/{z}/{x}/{y}.png',
@@ -74,7 +90,8 @@ L.OSM.DataLayer = L.FeatureGroup.extend({
   options: {
     areaTags: ['area', 'building', 'leisure', 'tourism', 'ruins', 'historic', 'landuse', 'military', 'natural', 'sport'],
     uninterestingTags: ['source', 'source_ref', 'source:ref', 'history', 'attribution', 'created_by', 'tiger:county', 'tiger:tlid', 'tiger:upload_uuid'],
-    styles: {}
+    styles: {},
+    asynchronous: false,
   },
 
   initialize: function (xml, options) {
@@ -93,7 +110,7 @@ L.OSM.DataLayer = L.FeatureGroup.extend({
     }
 
     for (var i = 0; i < features.length; i++) {
-      var feature = features[i], layer;
+      let feature = features[i], layer;
 
       if (feature.type === "changeset") {
         layer = L.rectangle(feature.latLngBounds, this.options.styles.changeset);
@@ -114,7 +131,12 @@ L.OSM.DataLayer = L.FeatureGroup.extend({
         }
       }
 
-      layer.addTo(this);
+      if (this.options.asynchronous) {
+        setTimeout(() => layer.addTo(this));
+      } else {
+        layer.addTo(this);
+      }
+
       layer.feature = feature;
     }
   },
@@ -125,9 +147,25 @@ L.OSM.DataLayer = L.FeatureGroup.extend({
       ways = L.OSM.getWays(xml, nodes),
       relations = L.OSM.getRelations(xml, nodes, ways);
 
+    var wayNodes = {}
+    for (var i = 0; i < ways.length; i++) {
+      var way = ways[i];
+      for (var j = 0; j < way.nodes.length; j++) {
+        wayNodes[way.nodes[j].id] = true
+      }
+    }
+
+    var relationNodes = {}
+    for (var i = 0; i < relations.length; i++){
+      var relation = relations[i];
+      for (var j = 0; j < relation.members.length; j++) {
+        relationNodes[relation.members[j].id] = true
+      }
+    }
+
     for (var node_id in nodes) {
       var node = nodes[node_id];
-      if (this.interestingNode(node, ways, relations)) {
+      if (this.interestingNode(node, wayNodes, relationNodes)) {
         features.push(node);
       }
     }
@@ -154,23 +192,9 @@ L.OSM.DataLayer = L.FeatureGroup.extend({
     return false;
   },
 
-  interestingNode: function (node, ways, relations) {
-    var used = false;
-
-    for (var i = 0; i < ways.length; i++) {
-      if (ways[i].nodes.indexOf(node) >= 0) {
-        used = true;
-        break;
-      }
-    }
-
-    if (!used) {
-      return true;
-    }
-
-    for (var i = 0; i < relations.length; i++) {
-      if (relations[i].members.indexOf(node) >= 0)
-        return true;
+  interestingNode: function (node, wayNodes, relationNodes) {
+    if (!wayNodes[node.id] || relationNodes[node.id]) {
+      return true
     }
 
     for (var key in node.tags) {
@@ -180,7 +204,28 @@ L.OSM.DataLayer = L.FeatureGroup.extend({
     }
 
     return false;
-  }
+  },
+
+  onRemove: function(map) {
+    this.eachLayer(map.removeLayer, map, this.options.asynchronous);
+  },
+
+  onAdd: function(map) {
+    this.eachLayer(map.addLayer, map, this.options.asynchronous);
+  },
+
+  eachLayer: function (method, context, asynchronous = false) {
+    for (let i in this._layers) {
+      if (asynchronous) {
+        setTimeout(() => {
+          method.call(context, this._layers[i]);
+        });
+      } else {
+        method.call(context, this._layers[i]);
+      }
+    }
+    return this;
+  },
 });
 
 L.Util.extend(L.OSM, {
@@ -266,7 +311,7 @@ L.Util.extend(L.OSM, {
         else // relation-way and relation-relation membership not implemented
           rel_object.members[j] = null;
       }
-
+      rel_object.members = rel_object.members.filter(i => i !== null && i !== undefined)
       result.push(rel_object);
     }
 

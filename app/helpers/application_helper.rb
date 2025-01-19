@@ -10,11 +10,11 @@ module ApplicationHelper
   end
 
   def rss_link_to(args = {})
-    link_to(image_tag("RSS.png", :size => "16x16", :border => 0), args, :class => "rsssmall")
+    link_to image_tag("RSS.png", :size => "16x16", :class => "align-text-bottom"), args
   end
 
   def atom_link_to(args = {})
-    link_to(image_tag("RSS.png", :size => "16x16", :border => 0), args, :class => "rsssmall")
+    link_to image_tag("RSS.png", :size => "16x16", :class => "align-text-bottom"), args
   end
 
   def dir
@@ -26,29 +26,31 @@ module ApplicationHelper
   end
 
   def friendly_date(date)
-    tag.span(time_ago_in_words(date), :title => l(date, :format => :friendly))
+    tag.time(time_ago_in_words(date), :title => l(date, :format => :friendly), :datetime => date.xmlschema)
   end
 
   def friendly_date_ago(date)
-    tag.span(time_ago_in_words(date, :scope => :"datetime.distance_in_words_ago"), :title => l(date, :format => :friendly))
+    tag.time(time_ago_in_words(date, :scope => :"datetime.distance_in_words_ago"), :title => l(date, :format => :friendly), :datetime => date.xmlschema)
   end
 
   def body_class
     if content_for? :body_class
       content_for :body_class
     else
-      "#{params[:controller]} #{params[:controller]}-#{params[:action]}"
+      controller_part = params[:controller].tr("/", "-")
+      "#{controller_part} #{controller_part}-#{params[:action]}"
     end
   end
 
-  def current_page_class(path)
-    :current if current_page?(path)
+  def header_nav_link_class(path)
+    ["nav-link", current_page?(path) ? "text-secondary-emphasis" : "text-secondary"]
   end
 
   def application_data
     data = {
       :locale => I18n.locale,
-      :preferred_editor => preferred_editor
+      :preferred_editor => preferred_editor,
+      :preferred_languages => preferred_languages.expand.map(&:to_s)
     }
 
     if current_user

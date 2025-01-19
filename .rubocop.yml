@@ -9,18 +9,13 @@ require:
   - rubocop-rake
 
 AllCops:
-  TargetRubyVersion: 3.0
+  TargetRubyVersion: 3.1
   NewCops: enable
   Exclude:
     - 'vendor/**/*'
 
 Rails:
   Enabled: true
-
-# Config can be removed after https://github.com/rubocop/rubocop-factory_bot/issues/53
-FactoryBot/AssociationStyle:
-  Include:
-    - 'test/factories/**/*'
 
 Layout/ExtraSpacing:
   AllowForAlignment: true
@@ -50,8 +45,15 @@ Naming/FileName:
 Naming/MethodParameterName:
   Enabled: false
 
+# This conflicts with Strong Migrations, which can't check `change_table`
+Rails/BulkChangeTable:
+  Enabled: false
+
 Rails/CreateTableWithTimestamps:
   Enabled: false
+
+Rails/FindBy:
+  IgnoreWhereFirst: false
 
 Rails/FindEach:
   Enabled: false
@@ -68,7 +70,7 @@ Rails/ReflectionClassName:
 Rails/SkipsModelValidations:
   Exclude:
     - 'db/migrate/*.rb'
-    - 'app/controllers/users_controller.rb'
+    - 'app/controllers/users/lists_controller.rb'
 
 Style/Documentation:
   Enabled: false

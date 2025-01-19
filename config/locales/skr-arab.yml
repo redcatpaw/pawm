@@ -24,9 +24,6 @@ skr-arab:
         create: تبصرہ کرو
       message:
         create: بھیڄو
-      client_application:
-        create: رجسٹر
-        update: اپ ݙیٹ
       oauth2_application:
         create: رجسٹر
         update: اپ ݙیٹ
@@ -40,10 +37,6 @@ skr-arab:
         create: بلاک بݨاؤ
         update: بلاک اپ ڈیٹ کرو
   activerecord:
-    errors:
-      messages:
-        invalid_email_address: جائز ای میل پتہ کائنی لڳدا پیا
-        email_address_not_routable: روٹیبل کائنی
     models:
       acl: رسائی کنٹرول تندیر
       changeset: تبدیلیاں
@@ -57,6 +50,7 @@ skr-arab:
       message: سنیہہ
       node: نوڈ
       node_tag: نوڈ ٹیگ
+      note: نوٹ
       old_node: پراݨا نوڈ
       old_node_tag: پراݨا نوڈ ٹیگ
       old_relation: پراݨا رشتہ
@@ -110,7 +104,7 @@ skr-arab:
         longitude: طول البلد
         public: عوام
         description: تفصیل
-        gpx_file: جی پی ایکس فائل اپ لوڈ کرو
+        gpx_file: جی پی ایس ٹریس فائل چݨو
         visibility: نظرݨ دی صلاحیت
         tagstring: ٹیگ
       message:
@@ -123,7 +117,6 @@ skr-arab:
         description: تفصیل
       user:
         email: ای میل
-        email_confirmation: ای میل دی تصدیق
         new_email: نواں ای میل پتہ
         active: متحرک
         display_name: ظاہری ناں
@@ -161,13 +154,6 @@ skr-arab:
       entry:
         comment: رائے
         full: پورا نوٹ
-  account:
-    deletions:
-      show:
-        title: میݙا کھاتہ مٹاؤ
-        delete_account: کھاتہ مٹاؤ
-        confirm_delete: بھلا تہاکوں پک ہے؟
-        cancel: منسوخ
   accounts:
     edit:
       title: کھاتے وچ تبدیلی کرو
@@ -188,11 +174,23 @@ skr-arab:
       heading: عوامی تبدیلیاں
     destroy:
       success: کھاتہ مٹ ڳیا۔
+    deletions:
+      show:
+        title: میݙا کھاتہ مٹاؤ
+        delete_account: کھاتہ مٹاؤ
+        confirm_delete: بھلا تہاکوں پک ہے؟
+        cancel: منسوخ
+    terms:
+      show:
+        title: شرطاں
+        heading: شرطاں
+        continue: جاری رکھو
+        cancel: منسوخ
+        legale_names:
+          france: فرانس
+          italy: اِٹلی
+          rest_of_world: باقی دنیا
   browse:
-    created: بݨ ڳیا
-    closed: بند تھیا
-    created_ago_html: '%{time_ago} خلقیا'
-    closed_ago_html: '%{time_ago} بند تھیا'
     version: ورژن
     in_changeset: تبدیلیاں
     anonymous: گمنام
@@ -202,16 +200,8 @@ skr-arab:
     view_history: تاریخچہ ݙیکھو
     view_details: تفصیل ݙکھاؤ
     location: 'محل وقوع:'
-    changeset:
-      title: تبدیلیاں:%{id}
-      belongs_to: مصنف
-      node: نوݙاں(%{count})
-      way: رستے(%{count})
-      comment: تبصرے (%{count})
-      discussion: بحث مباحثہ
     node:
       title_html: 'نوڈ: %{name}'
-      history_title_html: نوݙ تاریخچہ:%{name}
     way:
       title_html: رستہ:%{name}
       nodes: نوڈاں
@@ -225,12 +215,6 @@ skr-arab:
         relation: رشتہ
     not_found:
       title: کائنی لبھا
-      type:
-        node: نوڈ
-        way: راہ
-        relation: رشتہ
-        changeset: تبدیلیاں
-        note: نوٹ
     timeout:
       type:
         node: نوڈ
@@ -251,24 +235,36 @@ skr-arab:
       email_link: ای میل %{email}
     query:
       enclosing: منسلک خصوصیات
+  old_elements:
+    index:
+      node:
+        title_html: نوݙ تاریخچہ:%{name}
   changesets:
-    changeset_paging_nav:
-      showing_page: ورقہ %{page}
-      next: اڳلا »
-      previous: « پچھلا
     changeset:
-      anonymous: گمنام
       no_edits: (کوئی ترمیم کائنی)
-    changesets:
-      id: آئی ڈی
-      saved_at: تے محفوظ ہے
-      user: ورتݨ آلا
-      comment: رائے
-      area: علاقہ
     index:
       title: تبدیلیاں
       empty: تبدیلیاں کائنی لبھیاں۔
       load_more: ٻئے لوݙ کرو
+      feed:
+        created: بݨ ڳیا
+        closed: بند تھیا
+        belongs_to: مصنف
+    show:
+      title: تبدیلیاں:%{id}
+      created: بݨیا:%{when}
+      closed: 'بند تھیا: %{when}'
+      created_ago_html: '%{time_ago} خلقیا'
+      closed_ago_html: '%{time_ago} بند تھیا'
+      discussion: بحث مباحثہ
+      subscribe: سبسکرائب کرو
+      unsubscribe: اݨ سبسکرائب کرو
+      hide_comment: لُکاؤ
+      unhide_comment: ݙکھاؤ
+      comment: تبصرہ
+    paging_nav:
+      nodes: نوݙاں(%{count})
+      ways: رستے(%{count})
   dashboards:
     contact:
       km away: '%{count} کلومیٹر دور'
@@ -286,10 +282,11 @@ skr-arab:
       use_map_link: نقشہ استعمال کرو
     index:
       my_diary: میݙی ڈائری
-      older_entries: پراݨی انٹریاں
-      newer_entries: نویاں انٹریاں
     show:
       user_title: '%{user} دی ڈائری'
+      discussion: بحث مباحثہ
+      subscribe: سبسکرائب کرو
+      unsubscribe: اݨ سبسکرائب کرو
       leave_a_comment: رائے ݙیوو
       login: لاگ ان تھیوو
     diary_entry:
@@ -306,14 +303,14 @@ skr-arab:
       confirm: تصدیق
     location:
       location: 'محل وقوع:'
-      view: ݙکھالے
-      edit: لکھو
-    comments:
+  diary_comments:
+    page:
       post: پوسٹ
       when: کڈݨ
       comment: رائے
-      newer_comments: نویں رائے
-      older_comments: پراݨی رائے
+  doorkeeper:
+    scopes:
+      email: آپݨاں ای میل پتہ ݙیکھو
   errors:
     contact:
       contact: رابطہ
@@ -618,6 +615,8 @@ skr-arab:
           tower: ٹاور
           wreck: ملبہ
           "yes": تاریخی موقف
+        information:
+          map: نقشہ
         junction:
           "yes": جنکشن
         landuse:
@@ -675,6 +674,8 @@ skr-arab:
           swimming_pool: سوئمنگ پول
           water_park: واٹر پارک
           "yes": تفریح
+        lock:
+          "yes": جندرہ
         man_made:
           advertising: ایڈورٹائزنگ
           antenna: انٹینا
@@ -918,9 +919,12 @@ skr-arab:
           information: معلومات
           motel: موٹل
           museum: عڄائب گھر
+          theme_park: تھیم پارک
           zoo: چڑیا گھر
         tunnel:
           "yes": سرنگ
+        water:
+          lock: جندرہ
         waterway:
           canal: نہر
           dam: ڈیم
@@ -941,10 +945,6 @@ skr-arab:
         level7: میونسپلٹی سرحد
         level8: شہری سرحد
         level9: وستی سرحد
-      types:
-        cities: شہراں
-        towns: قصبے
-        places: جاہیں
     results:
       no_results: کوئی نتیجہ نی لبھا
       more_results: ٻئے نتیجے
@@ -956,11 +956,16 @@ skr-arab:
       not_updated: اپ ڈیٹ کائنی تھیا
       search: ڳولو
       search_guidance: 'ڳولݨ رولے:'
+      states:
+        open: کھولو
+        resolved: حل تھی ڳیا
+    page:
+      reported_user: رپورٹ تھیا ورتݨ آلا
       status: حیثیت
       reports: رپورٹاں
       last_updated: چھیکڑی تبدیلی
-      link_to_reports: رپوٹاں ݙیکھو
       states:
+        ignored: نظر انداز تھیا
         open: کھولو
         resolved: حل تھی ڳیا
     show:
@@ -990,9 +995,6 @@ skr-arab:
     history: تاریخچہ
     export: ٻاہر بھیڄو
     issues: مسئلے
-    data: ڈیٹا
-    export_data: ڈَیٹا برامد کرو
-    partners_ucl: یو سی ایل
     partners_fastly: تکھیرے
     partners_partners: بھائیوال
     tou: ورتݨ شرطاں
@@ -1000,8 +1002,6 @@ skr-arab:
     about: تعارف
     copyright: نقل حقوق
     communities: برادریاں
-    community: برادری
-    community_blogs: برادری بلاگ
     learn_more: ٻیا سِکھو
     more: ٻئے
   user_mailer:
@@ -1011,6 +1011,11 @@ skr-arab:
       hi: سلام %{to_user}،
     friendship_notification:
       hi: سلام %{to_user}،
+    gpx_details:
+      filename: 'فائل ناں:'
+      url: یوآرایل
+      description: تفصیل
+      tags: ٹیگ
     gpx_failure:
       hi: سلام %{to_user}
     gpx_success:
@@ -1025,103 +1030,99 @@ skr-arab:
       greeting: سلام،
     changeset_comment_notification:
       hi: سلام %{to_user}،
-      greeting: سلام،
+      commented:
+        partial_changeset_without_comment: تبصرے بغیر
   confirmations:
     confirm:
+      heading: آپݨی ای میل ݙیکھو!
       button: تصدیق
-      click_here: اِتھ کلک کرو
     confirm_email:
       button: تصدیق
   messages:
-    inbox:
-      title: ان باکس
-      my_inbox: میݙا انباکس
-      my_outbox: میݙا آؤٹ باکس
-      from: کنوں
-      subject: موضوع
-      date: تریخ
-    message_summary:
-      unread_button: نشان لاؤ جو کائنی پڑھا
-      read_button: نشان لاؤ جو پڑھ گھدے
-      reply_button: جواب
-      destroy_button: مٹاؤ
     new:
       title: سنیہا پٹھو
       send_message_to_html: '%{name} کوں نواں سنیہا پٹھو'
       back_to_inbox: انباکس تے واپس
-    outbox:
-      title: آؤٹ باکس
-      my_inbox: میݙا انباکس
-      my_outbox: میݙا آؤٹ باکس
-      to: تائیں
-      subject: موضوع
-      date: تریخ
+    create:
+      message_sent: سنیہا بھیڄ ݙتے
     show:
       title: سنیہا پڑھو
       reply_button: جواب
       unread_button: نشان لاؤ جو کائنی پڑھا
       destroy_button: مٹاؤ
       back: پچھوں
-    sent_message_summary:
-      destroy_button: مٹاؤ
     destroy:
       destroyed: سنیہا مٹ ڳیا
+    mailboxes:
+      heading:
+        my_inbox: میݙا انباکس
+        my_outbox: میݙا آؤٹ باکس
+        muted_messages: خاموش تھئے سنیہے
+      messages_table:
+        from: کنوں
+        to: تائیں
+        subject: موضوع
+        date: تریخ
+        actions: عمل
+      message:
+        unread_button: نشان لاؤ جو کائنی پڑھا
+        read_button: نشان لاؤ جو پڑھ گھدے
+        destroy_button: مٹاؤ
+        unmute_button: انباکس تے ون٘ڄو
+    inboxes:
+      show:
+        title: ان باکس
+    muted_inboxes:
+      show:
+        title: خاموش تھئے سنیہے
+    outboxes:
+      show:
+        title: آؤٹ باکس
+      message:
+        destroy_button: مٹاؤ
   passwords:
-    lost_password:
-      email address: 'ای میل پتہ:'
+    new:
+      email address: ای میل پتہ
       new password button: پاس ورڈ ولدا ٹھیک کرو
-    reset_password:
+    edit:
       title: پاس ورڈ ولدا ٹھیک کرو
       reset: پاس ورڈ ولدا ٹھیک کرو
+    update:
       flash changed: تہاݙا پاس ورڈ تبدیل تھی ڳیا۔
   preferences:
     show:
       title: میݙیاں ترجیحاں
-      preferred_editor: ترجیحی ایڈیٹر
-      preferred_languages: ترجیحی زباناں
-      edit_preferences: ترجیحاں وچ تبدیلی کرو
-    edit:
+      site_color_schemes:
+        auto: خود کار
+        light: پھکّا
+        dark: ڳوڑھا
+      map_color_schemes:
+        auto: خود بخود
+        light: پھکّا
+        dark: ڳوڑھا
       save: ترجیحاں اپ ڈیٹ کرو
-      cancel: منسوخ
   profiles:
     edit:
       title: پروفائل وچ تبدیلی کرو
       save: پروفائل اپ ڈیٹ کرو
       cancel: منسوخ
       image: تصویر
+      gravatar:
+        gravatar: گراواتار ورتو
+        what_is_gravatar: گراواتار کیا ہے؟
+      new image: ہک تصویر شامل کرو
       show: ݙِکھاؤ
       delete: مٹاؤ
       undelete: بحال
   sessions:
     new:
-      title: لاگ ان
-      heading: لاگ ان
-      password: 'پاس ورڈ:'
-      openid_html: '%{logo} اوپن آئی ڈی:'
+      tab_title: لاگ ان
+      email or username: ای میل پتہ یا ورتݨ ناں
+      password: پاس ورڈ
       remember: میکوں یاد رکھو
       lost password link: پاسورڈ بھل ڳئے ہو؟
       login_button: لاگ ان
-      openid_logo_alt: اوپن آئی ڈی نال لاگ ان تھیوو
-      auth_providers:
-        openid:
-          title: اوپن آئی ڈی نال لاگ ان تھیوو
-          alt: اوپن آئی ڈی یوآرایل نال لاگ ان تھیوو
-        google:
-          title: گوگل نال لاگ ان تھیوو
-          alt: گوگل اوپن آئی ڈی نال لاگ ان تھیوو
-        facebook:
-          title: فیس بک نال لاگ ان تھیوو
-        microsoft:
-          title: مائیکروسافٹ نال لاگ ان تھیوو
-          alt: مائیکروسافٹ کھاتے نال لاگ ان تھیوو
-        github:
-          title: گٹ ہب نال لاگ ان تھیوو
-          alt: گٹ ہب کھاتے نال لاگ ان تھیوو
-        wikipedia:
-          title: وکی پیڈیا نال لاگ ان تھیوو
-          alt: وکی پیڈیا کھاتے نال لاگ ان تھیوو
-        wordpress:
-          title: ورڈپریس نال لاگ ان تھیوو
+      or: یا
     destroy:
       title: لاگ آؤٹ
       logout_button: لاگ آؤٹ
@@ -1140,9 +1141,19 @@ skr-arab:
     richtext_field:
       edit: لکھو
       preview: پیشگی ݙکھالا
+      help: مدد
+    pagination:
+      diary_comments:
+        older: پراݨی رائے
+        newer: نویں رائے
+      diary_entries:
+        older: پراݨی انٹریاں
+        newer: نویاں انٹریاں
+      issues:
+        older: پراݨے مسئلے
+        newer: نویں مسئلے
   site:
     about:
-      next: اڳلا
       community_driven_community_blogs: برادری بلاگ
       community_driven_osm_foundation: او ایس ایم فاؤنڈیشن
       open_data_open_data: کھلا ڈیٹا
@@ -1164,6 +1175,7 @@ skr-arab:
         contributors_ca_canada: کنیڈا
         contributors_fi_finland: فِن لینڈ
         contributors_fr_france: فرانس
+        contributors_hr_croatia: کروشین
         contributors_nl_netherlands: نیدرلینڈز
         contributors_nz_new_zealand: نیوزی لینڈ
         contributors_nz_cc_by: سی سی بی وائی ٤.٠
@@ -1172,35 +1184,21 @@ skr-arab:
         contributors_es_spain: سپین
         contributors_es_cc_by: سی سی بی وائی ٤.٠
         contributors_za_south_africa: جنوبی افریقہ
+        contributors_gb_united_kingdom: برطانیہ
         trademarks_title: ٹریڈ مارک
         trademarks_1_1_trademark_policy: ٹریڈمارک پالیسی
-    index:
-      permalink: پکا لنک
-      shortlink: مختصر لنک
-      createnote: نوٹ شامل کرو
     export:
       title: ٻاہر بھیڄو
       licence: لائیسنس
       too_large:
         other:
           title: ٻئے ماخذ
-      options: اختیارات
-      format: فارمیٹ
-      scale: پیمانہ
-      max: ودھ و ودھ
-      image_size: فوٹو دا سائز
-      zoom: وݙا چھوٹا کرݨ
-      latitude: عرض بلد
-      longitude: طول بلد
-      output: آؤٹ پٹ
       export_button: ٻاہر بھیڄو
     help:
       irc:
         title: آئی آر سی
     any_questions:
       title: کوئی سوال؟
-    sidebar:
-      close: بند کرو
     search:
       search: ڳولو
       from: کنوں
@@ -1209,35 +1207,54 @@ skr-arab:
     key:
       table:
         entry:
+          motorway: موٹروے
           track: ٹرَیک
-          tram:
-            1: ٹرام
-          cable:
-          - کیبل کار
-          - چیئر لفٹ
+          rail: ریلوے
+          train: ڳَݙی
+          subway: سب وے
+          light_rail: لائٹ ریل
+          tram: ٹرام
+          trolleybus: ٹرالی بس
+          bus: بس
+          cable_car: کیبل کار
+          chair_lift: چیئر لفٹ
+          taxiway: ٹیکسی دا راہ
+          capital: دار الحکومت
+          city: شَہر
+          orchard: بغیچا
           forest: جنگل
           wood: لکڑ
+          grass: گھا
+          meadow: چراگاہ
+          sand: ریت
           golf: گولف مَیدان
           park: پارک
-          common:
-          - وقف
-          - چراگاہ
-          - باغ
+          common: وقف
           retail: پرچون علاقہ
           industrial: صنعتی علاقہ
           commercial: کمرشل ایریا
-          lake:
-          - جھیل
+          lake: جھیل
+          reservoir: ذخائر
+          glacier: گلیشیئر
           farm: کھیت
-          school:
-          - سکول
-          - یونی ورسٹی
+          beach: ساحل
+          school: سکول
+          university: یونی ورسٹی
+          hospital: ہسپتال
           station: ریلوے ٹیشݨ
+          railway_halt: ریلوے ہالٹ
+          peak: چوٹی
+          bus_stop: بساں دا اݙا
+          toilets: بیت الخلاء
     welcome:
       title: ست بسم اللہ!
       basic_terms:
+        editor: ایڈیٹر
         node: نوڈ
+        way: راہ
         tag: ٹیگ
+      rules:
+        title: اصول!
       add_a_note:
         the_map: نقشہ
     communities:
@@ -1247,8 +1264,6 @@ skr-arab:
       help: مدد
     edit:
       cancel: منسوخ
-    trace_optionals:
-      tags: ٹیگ
     show:
       filename: 'فائل ناں:'
       download: ڈاؤن لوڈ
@@ -1270,6 +1285,26 @@ skr-arab:
   application:
     settings_menu:
       account_settings: کھاتہ ترتیباں
+    auth_providers:
+      openid_login_button: جاری رکھو
+      openid:
+        title: اوپن آئی ڈی نال لاگ ان تھیوو
+        alt: اوپن آئی ڈی لوگو
+      google:
+        title: گوگل نال لاگ ان تھیوو
+        alt: گوگل لوگو
+      facebook:
+        title: فیس بک نال لاگ ان تھیوو
+        alt: فیس بک لوگو
+      microsoft:
+        title: مائیکروسافٹ نال لاگ ان تھیوو
+        alt: مائیکروسافٹ لوگو
+      github:
+        title: گٹ ہب نال لاگ ان تھیوو
+        alt: گٹ ہب لوگو
+      wikipedia:
+        title: وکی پیڈیا نال لاگ ان تھیوو
+        alt: وکی پیڈیا لوگو
   oauth2_applications:
     index:
       name: ناں
@@ -1291,46 +1326,61 @@ skr-arab:
   users:
     new:
       title: سائن اپ
+      tab_title: سائن اپ
       support: سہارا
+      by_signing_up:
+        privacy_policy: رازداری پالیسی
       continue: سائن اپ
-      privacy_policy: رازداری پالیسی
-    terms:
-      title: شرطاں
-      heading: شرطاں
-      continue: جاری رکھو
-      decline: انکار کرو
-      legale_names:
-        france: فرانس
-        italy: اِٹلی
-        rest_of_world: باقی دنیا
+      email_help:
+        privacy_policy: رازداری پالیسی
+      or: یا
     show:
       my profile: میݙی پروفائل
       my settings: میݙیاں ترتیباں
       my comments: میݙے تبصرے
-  user_role:
-    grant:
-      confirm: تصدیق
-    revoke:
-      confirm: تصدیق
   user_blocks:
+    edit:
+      revoke: بلاک منسوخ کرو
     show:
-      show: ݙِکھاؤ
       edit: لکھو
     block:
       show: ݙِکھاؤ
       edit: تبدیلی کرو
+    navigation:
+      new_block: نواں بلاک
+  user_mutes:
+    index:
+      table:
+        thead:
+          actions: عمل
+        tbody:
+          send_message: سنیہا پٹھو
   notes:
     index:
       subheading_submitted: جمع تھی ڳیا
+      apply: لاڳو کرو
+      all: یکے
+      open: کھولو
+      closed: بند تھیا
+      status: حیثیت
     show:
       title: نوٹ:%{id}
       description: تفصیل
+      discussion: بحث مباحثہ
+      subscribe: سبسکرائب کرو
+      unsubscribe: اݨ سبسکرائب کرو
       hide: لُکاؤ
       resolve: حل کرو
       comment: تبصرہ
     new:
       title: نواں نوٹ
+      anonymous_warning_log_in: لاگ ان
+      anonymous_warning_sign_up: سائن اپ
       add: نوٹ شامل کرو
+    notes_paging_nav:
+      showing_page: ورقہ %{page}
+      next: اڳلا
+      previous: پچھلا
   javascripts:
     close: بند کرو
     share:
@@ -1343,13 +1393,6 @@ skr-arab:
       embed: ایچ ٹی ایم ایل
       format: فارمیٹ
       scale: 'پیمانہ:'
-    changesets:
-      show:
-        comment: تبصرہ
-        subscribe: سبسکرائب کرو
-        unsubscribe: اݨ سبسکرائب کرو
-        hide_comment: لُکاؤ
-        unhide_comment: ݙکھاؤ
     directions:
       engines:
         fossgis_valhalla_bicycle: سائیکل (ول ہلا)

@@ -21,9 +21,6 @@ sat:
         create: ᱨᱚᱲ ᱥᱮᱞᱮᱫ ᱛᱟᱢ
       message:
         create: ᱵᱷᱮᱡᱟ
-      client_application:
-        create: ᱧᱩᱛᱩᱢ ᱚᱞ
-        update: ᱦᱟᱹᱞᱤᱭᱟᱹᱜ
       oauth2_application:
         update: ᱟᱹᱨᱩ ᱯᱷᱮᱨᱟᱣ
       trace:
@@ -113,7 +110,6 @@ sat:
   auth:
     providers:
       none: ᱚᱠᱟᱦᱚᱸ ᱵᱟᱝ
-      openid: OpenID
       google: ᱜᱩᱜᱟᱹᱞ
       facebook: ᱯᱷᱮᱥᱵᱩᱠ
       github: ᱜᱤᱴᱦᱚᱵ
@@ -140,33 +136,24 @@ sat:
       contributor terms:
         link text: ᱱᱤᱭᱟᱹ ᱫᱚ ᱪᱮᱫ?
       save changes button: ᱵᱚᱫᱚᱞᱠᱚ ᱪᱟᱺᱪᱟᱣ ᱢᱮ
+    terms:
+      show:
+        consider_pd_why: ᱱᱤᱭᱟᱹ ᱫᱚ ᱪᱮᱫ?
+        continue: ᱞᱮᱛᱟᱲ
   browse:
-    created: ᱛᱮᱭᱟᱨᱱᱟ
-    closed: ᱵᱚᱸᱫᱚ
     anonymous: ᱵᱟᱝ ᱵᱟᱰᱟᱭ
     no_comment: (ᱚᱠᱛᱚ ᱵᱟᱝ)
     download_xml: XML ᱰᱟᱩᱱᱞᱚᱰ ᱢᱮ
     view_history: ᱱᱟᱜᱟᱢ ᱧᱮᱞᱢᱮ
     view_details: ᱵᱤᱵᱨᱚᱱ ᱧᱮᱞ ᱢᱮ
     location: 'ᱡᱟᱭᱜᱟ:'
-    changeset:
-      belongs_to: ᱚᱱᱚᱞᱤᱭᱟᱹ
-      node: (%{count}) ᱜᱟᱸᱴᱷᱠᱚ
-      way: (%{count}) ᱦᱚᱨᱠᱚ
-      relation: ᱥᱟᱹᱜᱟᱹᱭᱠᱩ (%{count})
-      relation_paginated: ᱥᱟᱹᱜᱟᱹᱭᱠᱩ (%{x}-%{y} of %{count})
-      comment: (%{count})ᱚᱠᱛᱟᱠᱚ
-      discussion: ᱜᱟᱞᱢᱟᱨᱟᱣ
     node:
       title_html: ᱜᱟᱸᱴᱷ:%{name}
-      history_title_html: 'ᱜᱟᱸᱴᱷ ᱨᱮᱭᱟᱜ ᱦᱤᱛᱟᱹᱞ: %{name}'
     way:
       title_html: '%{name} :ᱦᱚᱨ'
-      history_title_html: '%{name} :ᱦᱚᱨ ᱨᱮᱭᱟᱜ ᱦᱤᱛᱟᱹᱞ'
       nodes: ᱜᱟᱸᱴᱷᱠᱚ
     relation:
       title_html: 'ᱥᱟᱹᱜᱟᱹᱭ: %{name}'
-      history_title_html: 'ᱥᱟᱹᱜᱟᱹᱭ ᱱᱟᱜᱟᱢ: %{name}'
       members: ᱨᱟᱹᱥᱤᱭᱟᱹᱥ ᱠᱚ
     relation_member:
       type:
@@ -174,15 +161,9 @@ sat:
         way: ᱦᱚᱨ
         relation: ᱥᱟᱹᱜᱟᱹᱭ
     containing_relation:
-      entry_html: ᱥᱟᱹᱜᱟᱹᱭ %{relation_name}
       entry_role_html: ᱥᱟᱹᱜᱟᱹᱭ %{relation_name} (as %{relation_role})
     not_found:
       title: ᱵᱟᱝ ᱧᱟᱢ ᱞᱮᱱᱟ
-      type:
-        node: ᱜᱟᱸᱴᱷ
-        way: ᱦᱚᱨ
-        relation: ᱥᱟᱹᱜᱟᱹᱭ
-        note: ᱠᱷᱟᱴᱚ ᱚᱞ
     timeout:
       type:
         node: ᱜᱟᱸᱴᱷ
@@ -203,21 +184,32 @@ sat:
     query:
       introduction: ᱱᱚᱠᱥᱟ ᱨᱮ ᱚᱛᱟᱭ ᱢᱮ ᱥᱩᱨᱠᱚᱣᱟ ᱜᱩᱱᱠᱚ ᱧᱟᱢ ᱞᱟᱹᱜᱤᱫᱛᱮ ᱾
       nearby: ᱥᱩᱨᱠᱚᱣᱟ ᱜᱩᱱᱠᱚ
+  old_elements:
+    index:
+      node:
+        title_html: 'ᱜᱟᱸᱴᱷ ᱨᱮᱭᱟᱜ ᱦᱤᱛᱟᱹᱞ: %{name}'
+      way:
+        title_html: '%{name} :ᱦᱚᱨ ᱨᱮᱭᱟᱜ ᱦᱤᱛᱟᱹᱞ'
+      relation:
+        title_html: 'ᱥᱟᱹᱜᱟᱹᱭ ᱱᱟᱜᱟᱢ: %{name}'
   changesets:
-    changeset_paging_nav:
-      showing_page: ᱥᱟᱦᱴᱟ %{page}
-      next: ᱤᱱᱟ ᱛᱟᱭᱚᱢ >>
-      previous: « ᱛᱟᱭᱚᱢ
     changeset:
-      anonymous: ᱵᱟᱝ ᱵᱟᱰᱟᱭ
       no_edits: (ᱥᱟᱯᱲᱟᱣ ᱵᱟᱝ)
-    changesets:
-      id: ID
-      user: ᱵᱮᱵᱷᱟᱨᱤᱡ
-      comment: ᱚᱠᱛᱟ
-      area: ᱡᱟᱭᱜᱟ
     index:
       load_more: ᱟᱨᱦᱚᱸ ᱞᱟᱫᱮ ᱢᱮ
+      feed:
+        created: ᱛᱮᱭᱟᱨᱱᱟ
+        closed: ᱵᱚᱸᱫᱚ
+        belongs_to: ᱚᱱᱚᱞᱤᱭᱟᱹ
+    show:
+      discussion: ᱜᱟᱞᱢᱟᱨᱟᱣ
+      hide_comment: ᱫᱟᱱᱟᱝ
+      comment: ᱚᱠᱛᱟ
+    paging_nav:
+      nodes: (%{count}) ᱜᱟᱸᱴᱷᱠᱚ
+      ways: (%{count}) ᱦᱚᱨᱠᱚ
+      relations: ᱥᱟᱹᱜᱟᱹᱭᱠᱩ (%{count})
+      relations_paginated: ᱥᱟᱹᱜᱟᱹᱭᱠᱩ (%{x}-%{y} of %{count})
   dashboards:
     popup:
       your location: ᱟᱢᱟᱜ ᱡᱟᱭᱜᱟ
@@ -237,8 +229,6 @@ sat:
       new: ᱱᱟᱶᱟ ᱰᱟᱭᱨᱤ ᱟᱫᱮᱨ
       my_diary: ᱤᱧᱭᱟᱜ ᱰᱟᱭᱨᱤ
       no_entries: ᱰᱟᱭᱨᱤ ᱟᱫᱮᱨᱠᱚ ᱵᱟᱹᱱᱩᱜ-ᱟ
-      older_entries: ᱢᱟᱨᱤᱭᱟ ᱟᱫᱮᱨᱠᱚ
-      newer_entries: ᱱᱟᱶᱟᱱᱟ ᱟᱫᱮᱨᱠᱚ
     edit:
       title: ᱰᱟᱭᱨᱤ ᱟᱫᱮᱨ ᱥᱟᱯᱲᱟᱣ ᱢᱮ
       marker_text: ᱰᱟᱭᱨᱤ ᱟᱫᱮᱨ ᱨᱮᱭᱟᱜ ᱡᱟᱭᱜᱟ
@@ -258,13 +248,10 @@ sat:
       report: ᱱᱚᱶᱟ ᱚᱠᱛᱟ ᱨᱤᱯᱚᱴ ᱢᱮ
     location:
       location: 'ᱡᱟᱭᱜᱟ:'
-      view: ᱧᱮᱞ ᱢᱮ
-      edit: ᱥᱟᱯᱲᱟᱣ
-    comments:
+  diary_comments:
+    page:
       when: ᱛᱤᱥ
       comment: ᱚᱠᱛᱟ
-      newer_comments: ᱱᱟᱶᱟᱱᱟ ᱚᱠᱛᱟᱠᱚ
-      older_comments: ᱢᱟᱨᱤᱱᱟ ᱚᱠᱛᱟᱠᱚ
   friendships:
     make_friend:
       button: ᱜᱟᱛᱤ ᱞᱮᱠᱟ ᱥᱮᱞᱮᱫ ᱮᱢ
@@ -448,18 +435,14 @@ sat:
         level4: ᱡᱤᱞᱟᱹ ᱜᱷᱮᱨᱟ
         level6: ᱫᱤᱥᱚᱢ ᱜᱷᱮᱨᱟ
         level8: ᱥᱚᱦᱚᱨ ᱜᱷᱮᱨᱟ
-      types:
-        cities: ᱥᱚᱦᱚᱨᱠᱚ
-        towns: ᱴᱟᱩᱱᱠᱚ
-        places: ᱡᱟᱭᱜᱟᱠᱚ
   issues:
     index:
       search: ᱥᱮᱸᱫᱽᱨᱟ
-      status: ᱫᱚᱥᱟ
-      reports: ᱨᱤᱯᱚᱴᱠᱚ
-      link_to_reports: ᱨᱤᱯᱚᱴᱠᱚ ᱧᱮᱞ ᱢᱮ
       states:
         open: ᱡᱷᱤᱡ ᱢᱮ
+    page:
+      status: ᱫᱚᱥᱟ
+      reports: ᱨᱤᱯᱚᱴᱠᱚ
     show:
       new_reports: ᱱᱟᱶᱟ ᱨᱤᱯᱚᱴᱠᱚ
   reports:
@@ -483,19 +466,12 @@ sat:
     edit: ᱥᱟᱯᱲᱟᱣ
     history: ᱱᱟᱜᱟᱢ
     export: ᱵᱷᱮᱡᱟ
-    data: ᱥᱟᱹᱠᱷᱭᱟᱹᱛ
-    export_data: ᱥᱟᱹᱠᱷᱭᱟᱹᱛ ᱵᱷᱮᱡᱟ
     user_diaries: ᱵᱮᱵᱷᱟᱨᱤᱡ ᱠᱚᱣᱟ ᱰᱟᱭᱨᱤᱠᱚ
-    user_diaries_tooltip: ᱵᱮᱵᱷᱟᱨᱤᱡ ᱰᱟᱭᱨᱤᱠᱚ ᱧᱮᱞ ᱢᱮ
     edit_with: '%{editor} ᱛᱮ ᱥᱟᱯᱲᱟᱣ ᱢᱮ'
     intro_header: OpenStreetMap ᱨᱮ ᱥᱟᱹᱜᱩᱱ ᱫᱟᱨᱟᱢ!
-    intro_2_create_account: ᱢᱤᱫ ᱵᱮᱵᱷᱟᱨᱤᱭᱟᱹ ᱠᱷᱟᱛᱟ ᱛᱮᱭᱟᱨ ᱛᱟᱢ
     help: ᱜᱚᱸᱲᱚᱸ
     about: ᱵᱟᱵᱚᱛ
     copyright: ᱪᱷᱟᱯᱟᱦᱚᱠ
-    community: ᱵᱤᱨᱟᱹᱫ
-    make_a_donation:
-      text: ᱫᱟᱱ ᱮᱢᱢᱮ
     learn_more: ᱟᱨᱦᱚᱸ ᱪᱤᱫᱢᱮ
     more: ᱵᱟᱹᱲᱛᱤ
   confirmations:
@@ -505,26 +481,25 @@ sat:
     confirm_email:
       button: ᱜᱚᱴᱟᱭ ᱢᱮ
   messages:
-    inbox:
-      subject: ᱵᱤᱥᱚᱭ
-      date: ᱢᱟᱹᱦᱤᱛ
-    message_summary:
-      destroy_button: ᱜᱮᱫ ᱜᱤᱰᱤ
     new:
       title: ᱠᱷᱚᱵᱚᱨ ᱠᱩᱞ ᱢᱮ
-    outbox:
-      subject: ᱵᱤᱥᱚᱭ
-      date: ᱢᱟᱹᱦᱤᱛ
     show:
       destroy_button: ᱜᱮᱫ ᱜᱤᱰᱤ
       back: ᱛᱟᱭᱚᱢ
-    sent_message_summary:
-      destroy_button: ᱜᱮᱫ ᱜᱤᱰᱤ
+    mailboxes:
+      messages_table:
+        subject: ᱵᱤᱥᱚᱭ
+        date: ᱢᱟᱹᱦᱤᱛ
+      message:
+        destroy_button: ᱜᱮᱫ ᱜᱤᱰᱤ
+    outboxes:
+      message:
+        destroy_button: ᱜᱮᱫ ᱜᱤᱰᱤ
   passwords:
-    lost_password:
+    new:
       title: ᱫᱟᱱᱟᱝ ᱥᱟᱵᱟᱫᱽ ᱟᱫ ᱠᱮᱫᱟᱢ
       email address: 'ᱤᱢᱮᱞ ᱴᱷᱤᱠᱟᱹᱬᱟ:'
-    reset_password:
+    update:
       flash changed: ᱟᱢᱟᱜ ᱫᱟᱱᱟᱝ ᱥᱟᱵᱟᱫᱽ ᱫᱚ ᱵᱚᱫᱚᱞᱮᱱᱟ ᱾
   profiles:
     edit:
@@ -533,19 +508,11 @@ sat:
       home location: 'ᱚᱲᱟᱜ ᱡᱟᱭᱜᱟ:'
   sessions:
     new:
-      title: ᱵᱚᱞᱚᱜ ᱢᱮ
-      heading: ᱵᱚᱞᱚᱜ ᱢᱮ
+      tab_title: ᱵᱚᱞᱚᱜ ᱢᱮ
       password: 'ᱫᱟᱱᱟᱝ ᱥᱟᱵᱟᱫᱽ:'
       remember: ᱫᱤᱥᱟᱹᱭᱤᱧ ᱢᱮ
       lost password link: ᱟᱢᱟᱜ ᱫᱟᱱᱟᱝ ᱥᱟᱵᱟᱫᱽ ᱟᱫᱟᱠᱟᱫᱟᱢ?
       login_button: ᱵᱚᱞᱚᱜ ᱢᱮ
-      register now: ᱱᱤᱛᱜᱮ ᱚᱞ ᱦᱚᱪᱚᱜ ᱢᱮ
-      no account: ᱠᱷᱟᱛᱟ ᱵᱟᱱᱩᱜ ᱛᱟᱢᱟ?
-      auth_providers:
-        github:
-          title: ᱜᱤᱴᱦᱚᱵ ᱥᱟᱣᱛᱮ ᱞᱚᱜᱤᱱ ᱢᱮ
-        wikipedia:
-          title: ᱩᱭᱠᱤᱯᱤᱰᱤᱭᱟ ᱥᱟᱣᱛᱮ ᱞᱚᱜᱤᱱ ᱢᱮ
     destroy:
       title: ᱩᱰᱩᱜᱚᱜᱢᱮ
       logout_button: ᱩᱰᱩᱜᱚᱜᱢᱮ
@@ -558,28 +525,27 @@ sat:
     richtext_field:
       edit: ᱥᱟᱯᱲᱟᱣ
       preview: ᱧᱮᱞ ᱵᱤᱰᱟᱹᱣ
+    pagination:
+      diary_comments:
+        older: ᱢᱟᱨᱤᱱᱟ ᱚᱠᱛᱟᱠᱚ
+        newer: ᱱᱟᱶᱟᱱᱟ ᱚᱠᱛᱟᱠᱚ
+      diary_entries:
+        older: ᱢᱟᱨᱤᱭᱟ ᱟᱫᱮᱨᱠᱚ
+        newer: ᱱᱟᱶᱟᱱᱟ ᱟᱫᱮᱨᱠᱚ
   site:
-    about:
-      next: ᱛᱟᱭᱚᱢ ᱨᱮᱱᱟᱜ
     copyright:
       native:
         mapping_link: ᱱᱚᱠᱥᱟ ᱛᱮᱭᱟᱨ ᱮᱦᱚᱵ ᱢᱮ
-    index:
-      createnote: ᱠᱷᱟᱴᱚ ᱚᱞ ᱥᱮᱞᱮᱫ ᱢᱮ
     edit:
       user_page_link: ᱵᱮᱵᱦᱟᱨᱤᱭᱟᱜ ᱥᱟᱦᱴᱟ
     export:
       title: ᱵᱷᱮᱡᱟ
-      zoom: ᱞᱟᱹᱴᱩ
       export_button: ᱵᱷᱮᱡᱟ
     help:
       welcome:
         title: OpenStreetMap ᱨᱮ ᱥᱟᱹᱜᱩᱱ ᱫᱟᱨᱟᱢ
-    sidebar:
-      close: ᱵᱚᱸᱫᱚ
     search:
       search: ᱥᱮᱸᱫᱽᱨᱟ
-      get_directions: ᱫᱤᱥᱟᱠᱚ ᱧᱟᱢ ᱢᱮ
       where_am_i: ᱱᱚᱣᱟ ᱚᱠᱟ ᱨᱮ ᱢᱮᱱᱟᱜ-ᱟ?
       submit_text: ᱜᱚ
     key:
@@ -589,8 +555,7 @@ sat:
           forest: ᱵᱤᱨ
           wood: ᱠᱟᱴᱷ
           park: ᱵᱟᱜᱟᱱ
-          school:
-          - ᱤᱛᱩᱱ ᱟᱥᱲᱟ
+          school: ᱤᱛᱩᱱ ᱟᱥᱲᱟ
           bicycle_shop: ᱥᱟᱭᱠᱤᱞ ᱫᱩᱠᱟᱹᱱ
           bicycle_parking: ᱥᱟᱭᱠᱤᱞ ᱯᱟᱨᱠᱤᱝ
           toilets: ᱴᱚᱭᱞᱮᱴᱠᱚ
@@ -620,25 +585,16 @@ sat:
       view_map: ᱱᱚᱠᱥᱟ ᱧᱮᱞ ᱢᱮ
       edit_map: ᱱᱚᱠᱥᱟ ᱥᱟᱯᱲᱟᱣ ᱢᱮ
       public: ᱦᱚᱲ ᱠᱚᱣᱟ
-  oauth:
-    authorize:
-      allow_write_api: ᱱᱚᱠᱥᱟ ᱵᱚᱫᱚᱞ ᱢᱮ ᱾
-      allow_write_notes: ᱠᱷᱟᱴᱟᱹ ᱚᱞᱠᱚ ᱵᱚᱫᱚᱞ ᱢᱮ ᱾
-  oauth_clients:
-    edit:
-      title: ᱟᱢᱟᱜ ᱟᱹᱨᱡᱤ ᱥᱟᱠᱟᱢ ᱥᱟᱯᱲᱟᱣ ᱛᱟᱢ
-    show:
-      edit: ᱵᱤᱵᱨᱚᱱᱠᱚ ᱥᱟᱯᱲᱟᱣ ᱢᱮ
-      confirm: ᱪᱮᱫ ᱟᱢ ᱜᱚᱴᱟ ᱢᱮᱱᱟᱢ-ᱟ?
-    index:
-      application: ᱟᱹᱨᱡᱤ ᱥᱟᱠᱟᱢ ᱧᱩᱛᱩᱢ
+  application:
+    auth_providers:
+      github:
+        title: ᱜᱤᱴᱦᱚᱵ ᱥᱟᱣᱛᱮ ᱞᱚᱜᱤᱱ ᱢᱮ
+      wikipedia:
+        title: ᱩᱭᱠᱤᱯᱤᱰᱤᱭᱟ ᱥᱟᱣᱛᱮ ᱞᱚᱜᱤᱱ ᱢᱮ
   users:
     new:
       title: ᱧᱩᱛᱩᱢ ᱚᱞ
       continue: ᱧᱩᱛᱩᱢ ᱚᱞ
-    terms:
-      consider_pd_why: ᱱᱤᱭᱟᱹ ᱫᱚ ᱪᱮᱫ?
-      continue: ᱞᱮᱛᱟᱲ
     show:
       my diary: ᱤᱧᱭᱟᱜ ᱰᱟᱭᱨᱤ
       my edits: ᱤᱧᱭᱟᱜ ᱥᱟᱯᱲᱟᱣᱠᱚ
@@ -656,28 +612,19 @@ sat:
       status: 'ᱫᱚᱥᱟ:'
       comments: ᱚᱠᱛᱟᱠᱚ
       confirm: ᱜᱚᱴᱟᱭ ᱢᱮ
-    index:
-      title: ᱵᱮᱵᱦᱟᱨᱤᱡᱽᱠᱩ
-      heading: ᱵᱮᱵᱦᱟᱨᱤᱡᱽᱠᱩ
-  user_role:
-    grant:
-      confirm: ᱜᱚᱴᱟᱭ ᱢᱮ
-    revoke:
-      confirm: ᱜᱚᱴᱟᱭ ᱢᱮ
+    lists:
+      show:
+        title: ᱵᱮᱵᱦᱟᱨᱤᱡᱽᱠᱩ
+        heading: ᱵᱮᱵᱦᱟᱨᱤᱡᱽᱠᱩ
   user_blocks:
     show:
       status: ᱫᱚᱥᱟ
-      show: ᱧᱮᱞ
       edit: ᱥᱟᱯᱲᱟᱣ
-      confirm: ᱪᱮᱫ ᱟᱢ ᱜᱚᱴᱟ ᱢᱮᱱᱟᱢ-ᱟ?
     block:
       show: ᱧᱮᱞ
       edit: ᱥᱟᱯᱲᱟᱣ
-    blocks:
+    page:
       status: ᱫᱚᱥᱟ
-      showing_page: ᱥᱟᱦᱴᱟ %{page}
-      next: ᱤᱱᱟ ᱛᱟᱭᱚᱢ >>
-      previous: « ᱛᱟᱭᱚᱢ
   notes:
     show:
       title: '%{id} :ᱠᱷᱟᱴᱟᱹ ᱚᱞ'
@@ -688,6 +635,8 @@ sat:
     new:
       title: ᱱᱟᱶᱟ ᱠᱷᱟᱴᱚ ᱚᱞ
       add: ᱠᱷᱟᱴᱟᱹ ᱚᱞ ᱥᱮᱞᱮᱫ ᱢᱮ
+    notes_paging_nav:
+      showing_page: ᱥᱟᱦᱴᱟ %{page}
   javascripts:
     close: ᱵᱚᱸᱫᱚ
     share:
@@ -717,10 +666,6 @@ sat:
       edit_tooltip: ᱱᱟᱠᱥᱟ ᱥᱟᱯᱲᱟᱣ ᱢᱮ
       edit_disabled_tooltip: ᱱᱚᱠᱥᱟ ᱥᱟᱯᱲᱟᱣ ᱞᱟᱹᱜᱤᱫᱛᱮ ᱵᱷᱤᱛᱨᱤ ᱥᱮᱫ ᱡᱩᱢ ᱢᱮ
       createnote_tooltip: ᱱᱚᱠᱥᱟ ᱨᱮ ᱠᱷᱟᱴᱟᱹ ᱚᱞ ᱥᱮᱞᱮᱫ ᱢᱮ
-    changesets:
-      show:
-        comment: ᱚᱠᱛᱟ
-        hide_comment: ᱫᱟᱱᱟᱝ
     directions:
       engines:
         fossgis_osrm_bike: ᱵᱟᱭᱥᱟᱭᱠᱤᱞ (OSRM)

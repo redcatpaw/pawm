@@ -2,14 +2,17 @@
 #
 # Table name: notes
 #
-#  id         :bigint(8)        not null, primary key
-#  latitude   :integer          not null
-#  longitude  :integer          not null
-#  tile       :bigint(8)        not null
-#  updated_at :datetime         not null
-#  created_at :datetime         not null
-#  status     :enum             not null
-#  closed_at  :datetime
+#  id          :bigint(8)        not null, primary key
+#  latitude    :integer          not null
+#  longitude   :integer          not null
+#  tile        :bigint(8)        not null
+#  updated_at  :datetime         not null
+#  created_at  :datetime         not null
+#  status      :enum             not null
+#  closed_at   :datetime
+#  description :text             default(""), not null
+#  user_id     :bigint(8)
+#  user_ip     :inet
 #
 # Indexes
 #
@@ -17,12 +20,18 @@
 #  notes_tile_status_idx  (tile,status)
 #  notes_updated_at_idx   (updated_at)
 #
+# Foreign Keys
+#
+#  notes_user_id_fkey  (user_id => users.id)
+#
 
 class Note < ApplicationRecord
   include GeoRecord
 
   has_many :comments, -> { left_joins(:author).where(:visible => true, :users => { :status => [nil, "active", "confirmed"] }).order(:created_at) }, :class_name => "NoteComment", :foreign_key => :note_id
   has_many :all_comments, -> { left_joins(:author).order(:created_at) }, :class_name => "NoteComment", :foreign_key => :note_id, :inverse_of => :note
+  has_many :subscriptions, :class_name => "NoteSubscription"
+  has_many :subscribers, :through => :subscriptions, :source => :user
 
   validates :id, :uniqueness => true, :presence => { :on => :update },
                  :numericality => { :on => :update, :only_integer => true }
@@ -80,12 +89,22 @@ class Note < ApplicationRecord
     closed_at + DEFAULT_FRESHLY_CLOSED_LIMIT
   end
 
-  # Return the author object, derived from the first comment
+  # Return the note's description, derived from the first comment
+  def description
+    comments.first.body
+  end
+
+  # Return the note's author object, derived from the first comment
   def author
     comments.first.author
   end
 
-  # Return the author IP address, derived from the first comment
+  # Return the note's author ID, derived from the first comment
+  def author_id
+    comments.first.author_id
+  end
+
+  # Return the note's author IP address, derived from the first comment
   def author_ip
     comments.first.author_ip
   end

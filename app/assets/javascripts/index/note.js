@@ -22,50 +22,54 @@ OSM.Note = function (map) {
 
   page.pushstate = page.popstate = function (path, id) {
     OSM.loadSidebarContent(path, function () {
-      initialize(path, id, function () {
-        var data = $(".details").data();
-        if (!data) return;
-        var latLng = L.latLng(data.coordinates.split(","));
-        if (!map.getBounds().contains(latLng)) moveToNote();
-      });
+      initialize(path, id);
+
+      var data = $(".details").data();
+      if (!data) return;
+      var latLng = L.latLng(data.coordinates.split(","));
+      if (!map.getBounds().contains(latLng)) moveToNote();
     });
   };
 
   page.load = function (path, id) {
-    initialize(path, id, moveToNote);
+    initialize(path, id);
+    moveToNote();
   };
 
-  function initialize(path, id, callback) {
-    content.find("input[type=submit]").on("click", function (e) {
+  function initialize(path, id) {
+    content.find("button[name]").on("click", function (e) {
       e.preventDefault();
       var data = $(e.target).data();
-      var form = e.target.form;
-
-      $(form).find("input[type=submit]").prop("disabled", true);
-
-      $.ajax({
+      var name = $(e.target).attr("name");
+      var ajaxSettings = {
         url: data.url,
         type: data.method,
         oauth: true,
-        data: { text: $(form.text).val() },
-        success: function () {
-          OSM.loadSidebarContent(path, function () {
-            initialize(path, id, moveToNote);
+        success: () => {
+          OSM.loadSidebarContent(path, () => {
+            initialize(path, id);
+            moveToNote();
           });
+        },
+        error: (xhr) => {
+          content.find("#comment-error")
+            .text(xhr.responseText)
+            .prop("hidden", false)
+            .get(0).scrollIntoView({ block: "nearest" });
+          updateButtons();
         }
-      });
+      };
+
+      if (name !== "subscribe" && name !== "unsubscribe" && name !== "reopen") {
+        ajaxSettings.data = { text: content.find("textarea").val() };
+      }
+
+      content.find("button[name]").prop("disabled", true);
+      $.ajax(ajaxSettings);
     });
 
     content.find("textarea").on("input", function (e) {
-      var form = e.target.form;
-
-      if ($(e.target).val() === "") {
-        $(form.close).val($(form.close).data("defaultActionText"));
-        $(form.comment).prop("disabled", true);
-      } else {
-        $(form.close).val($(form.close).data("commentActionText"));
-        $(form.comment).prop("disabled", false);
-      }
+      updateButtons(e.target.form);
     });
 
     content.find("textarea").val("").trigger("input");
@@ -80,8 +84,19 @@ OSM.Note = function (map) {
         icon: noteIcons[data.status]
       });
     }
+  }
 
-    if (callback) callback();
+  function updateButtons() {
+    var resolveButton = content.find("button[name='close']");
+    var commentButton = content.find("button[name='comment']");
+
+    content.find("button[name]").prop("disabled", false);
+    if (content.find("textarea").val() === "") {
+      resolveButton.text(resolveButton.data("defaultActionText"));
+      commentButton.prop("disabled", true);
+    } else {
+      resolveButton.text(resolveButton.data("commentActionText"));
+    }
   }
 
   function moveToNote() {

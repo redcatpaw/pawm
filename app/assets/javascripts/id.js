@@ -13,8 +13,10 @@ document.addEventListener("DOMContentLoaded", function () {
   } else {
     var idContext = iD.coreContext();
     idContext.connection().apiConnections([]);
+    var url = location.protocol + "//" + location.host;
     idContext.preauth({
-      url: location.protocol + "//" + location.host,
+      url: url,
+      apiUrl: url === "https://www.openstreetmap.org" ? "https://api.openstreetmap.org" : url,
       access_token: container.dataset.token
     });
 
@@ -26,6 +28,12 @@ document.addEventListener("DOMContentLoaded", function () {
       .containerNode(container)
       .init();
 
+    if (parent === window) {
+      // iD not opened in an iframe -> skip setting of parent  handlers
+      return;
+    }
+
+    var hashChangedAutomatically = false;
     id.map().on("move.embed", parent.$.throttle(250, function () {
       if (id.inIntro()) return;
       var zoom = ~~id.map().zoom(),
@@ -35,24 +43,38 @@ document.addEventListener("DOMContentLoaded", function () {
       parent.updateLinks(llz, zoom);
 
       // Manually resolve URL to avoid iframe JS context weirdness.
-      // http://bl.ocks.org/jfirebaugh/5439412
+      // https://gist.github.com/jfirebaugh/5439412
       var hash = parent.OSM.formatHash(llz);
       if (hash !== parent.location.hash) {
+        hashChangedAutomatically = true;
         parent.location.replace(parent.location.href.replace(/(#.*|$)/, hash));
       }
     }));
 
-    parent.$("body").on("click", "a.set_position", function (e) {
-      e.preventDefault();
-      var data = parent.$(this).data();
-
+    function goToLocation(data) {
       // 0ms timeout to avoid iframe JS context weirdness.
-      // http://bl.ocks.org/jfirebaugh/5439412
+      // https://gist.github.com/jfirebaugh/5439412
       setTimeout(function () {
         id.map().centerZoom(
           [data.lon, data.lat],
           Math.max(data.zoom || 15, 13));
       }, 0);
+    }
+
+    parent.$("body").on("click", "a.set_position", function (e) {
+      e.preventDefault();
+      var data = parent.$(this).data();
+      goToLocation(data);
+    });
+
+    parent.addEventListener("hashchange", function (e) {
+      if (hashChangedAutomatically) {
+        hashChangedAutomatically = false;
+        return;
+      }
+      e.preventDefault();
+      var data = parent.OSM.mapParams();
+      goToLocation(data);
     });
   }
 });

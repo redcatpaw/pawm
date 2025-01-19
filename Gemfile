@@ -1,7 +1,8 @@
 source "https://rubygems.org"
 
 # Require rails
-gem "rails", "~> 7.0.0"
+gem "rails", "~> 7.2.0"
+gem "turbo-rails"
 
 # Require json for multi_json
 gem "json"
@@ -10,7 +11,9 @@ gem "json"
 gem "pg"
 
 # Use SCSS for stylesheets
-gem "sassc-rails"
+gem "dartsass-sprockets"
+# Pin the dependentent sass-embedded to avoid deprecation warnings in bootstrap
+gem "sass-embedded", "~> 1.64.0"
 
 # Use Terser as compressor for JavaScript assets
 gem "terser"
@@ -24,8 +27,9 @@ gem "jbuilder", "~> 2.7"
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", ">= 1.4.2", :require => false
 
-# Use R2 for RTL conversion
-gem "r2", "~> 0.2.7"
+# Use rtlcss for RTL conversion
+gem "mini_racer", "~> 0.9.0"
+gem "rtlcss"
 
 # Use autoprefixer to generate CSS prefixes
 gem "autoprefixer-rails"
@@ -39,34 +43,40 @@ gem "argon2"
 # Support brotli compression for assets
 gem "sprockets-exporters_pack"
 
+# Restore File.exists? for oauth gem
+gem "file_exists"
+
 # Load rails plugins
 gem "actionpack-page_caching", ">= 1.2.0"
 gem "activerecord-import"
 gem "active_record_union"
-gem "bootstrap", "~> 5.1.0"
+gem "bootstrap", "~> 5.3.2"
 gem "bootstrap_form", "~> 5.0"
 gem "cancancan"
-gem "composite_primary_keys", "~> 14.0.0"
 gem "config"
 gem "delayed_job_active_record"
+gem "dry-schema", "< 1.14.0" # see https://github.com/openstreetmap/openstreetmap-website/issues/5482
+gem "dry-validation"
 gem "frozen_record"
 gem "http_accept_language", "~> 2.1.1"
 gem "i18n-js", "~> 3.9.2"
-gem "oauth-plugin", ">= 0.5.1"
 gem "openstreetmap-deadlock_retry", ">= 1.3.1", :require => "deadlock_retry"
 gem "rack-cors"
 gem "rails-i18n", "~> 7.0.0"
+gem "rails_param"
 gem "rinku", ">= 2.0.6", :require => "rails_rinku"
-gem "strong_migrations"
+gem "strong_migrations", "< 2.0.0"
 gem "validates_email_format_of", ">= 1.5.1"
 
 # Native OSM extensions
 gem "quad_tile", "~> 1.0.1"
 
 # Sanitise URIs
+gem "addressable", "~> 2.8"
 gem "rack-uri_sanitizer"
 
 # Omniauth for authentication
+gem "multi_json"
 gem "omniauth", "~> 2.0.2"
 gem "omniauth-facebook"
 gem "omniauth-github"
@@ -79,6 +89,7 @@ gem "omniauth-rails_csrf_protection", "~> 1.0"
 # Doorkeeper for OAuth2
 gem "doorkeeper"
 gem "doorkeeper-i18n"
+gem "doorkeeper-openid_connect"
 
 # Markdown formatting support
 gem "kramdown"
@@ -107,9 +118,6 @@ gem "connection_pool"
 gem "dalli"
 gem "kgio"
 
-# Load secure_headers for Content-Security-Policy support
-gem "secure_headers"
-
 # Load canonical-rails to generate canonical URLs
 gem "canonical-rails"
 
@@ -123,7 +131,7 @@ gem "gd2-ffij", ">= 0.4.0"
 gem "marcel"
 
 # Used for browser detection
-gem "browser"
+gem "browser", "< 6" # for ruby 3.1 support
 
 # Used for S3 object storage
 gem "aws-sdk-s3"
@@ -131,14 +139,22 @@ gem "aws-sdk-s3"
 # Used to resize user images
 gem "image_processing"
 
+# Used to validate widths
+gem "unicode-display_width"
+
+# Lock some modules to old versions for ruby 3.1 support
+gem "zeitwerk", "< 2.7"
+
 # Gems useful for development
 group :development do
-  gem "annotate"
   gem "better_errors"
   gem "binding_of_caller"
+  gem "danger"
+  gem "danger-auto_label"
   gem "debug_inspector"
   gem "i18n-tasks"
   gem "listen"
+  gem "overcommit"
   gem "vendorer"
 end
 
@@ -148,7 +164,9 @@ group :test do
   gem "capybara", ">= 2.15"
   gem "erb_lint", :require => false
   gem "factory_bot_rails"
+  gem "jwt"
   gem "minitest", "~> 5.1"
+  gem "minitest-focus", :require => false
   gem "puma", "~> 5.6"
   gem "rails-controller-testing"
   gem "rubocop"
@@ -162,4 +180,13 @@ group :test do
   gem "simplecov", :require => false
   gem "simplecov-lcov", :require => false
   gem "webmock"
+end
+
+group :development, :test do
+  gem "annotate"
+  gem "teaspoon"
+  gem "teaspoon-mocha", "~> 2.3.3"
+
+  # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
+  gem "debug", :require => "debug/prelude"
 end
